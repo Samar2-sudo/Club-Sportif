@@ -3,6 +3,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Axios from 'axios';
 import { useParams } from 'react-router-dom';
 import '../../form.css'; // Assurez-vous d'importer votre fichier CSS
+import {  Layout, Menu } from 'antd';
+
+const { Header, Content, Footer } = Layout;
 
 const UpdateProfilePage = () => {
     const { userId } = useParams();
@@ -62,36 +65,71 @@ const UpdateProfilePage = () => {
     };
 
     return (
-        <div className="profil-form">
-            <h2>Update Profile</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="profil-form-group">
-                    <label htmlFor="firstName">First Name:</label>
-                    <input type="text" id="firstName" name="firstName" value={userData.firstName} onChange={handleInputChange} />
+        <Layout>
+            <Header
+                style={{
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 1,
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                }}
+            >
+                <div className="demo-logo" />
+                <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']} style={{ flex: 1, minWidth: 0 }}>
+                    <Menu.Item key="1">Logout</Menu.Item>
+                    <Menu.Item key="2">Profile</Menu.Item>
+                </Menu>
+            </Header>
+            <Content style={{ padding: '24px 48px' }}>
+                <div
+                    style={{
+                        minHeight: 280,
+                        background: '#fff', // Adjust background color as needed
+                        borderRadius: 10, // Adjust border radius as needed
+                    }}
+                >
+                    <div className="profil-form">
+                        <h2>Update Profile</h2>
+                        <form onSubmit={handleSubmit}>
+                            <div className="profil-form-group">
+                                <label htmlFor="firstName">First Name:</label>
+                                <input type="text" id="firstName" name="firstName" value={userData.firstName} onChange={handleInputChange} />
+                            </div>
+                            <div className="profil-form-group">
+                                <label htmlFor="lastName">Last Name:</label>
+                                <input type="text" id="lastName" name="lastName" value={userData.lastName} onChange={handleInputChange} />
+                            </div>
+                            <div className="profil-form-group">
+                                <label htmlFor="dateOfBirth">Date of Birth:</label>
+                                <input type="date" id="dateOfBirth" name="dateOfBirth" value={userData.dateOfBirth} onChange={handleInputChange} />
+                            </div>
+                            <div className="profil-form-group">
+                                <label htmlFor="address">Address:</label>
+                                <input type="text" id="address" name="address" value={userData.address} onChange={handleInputChange} />
+                            </div>
+                            <div className="profil-form-group">
+                                <label htmlFor="phoneNumber">Phone Number:</label>
+                                <input type="text" id="phoneNumber" name="phoneNumber" value={userData.phoneNumber} onChange={handleInputChange} />
+                            </div>
+                            <div className="profil-form-group">
+                                <label htmlFor="profileImage">Profile Image:</label>
+                                <input type="file" id="profileImage" name="profileImage" onChange={(e) => setUserData({ ...userData, profileImage: e.target.files[0] })} />
+                            </div>
+                            <button className="profil-submit-button" type="submit">Submit</button>
+                        </form>
+                    </div>
                 </div>
-                <div className="profil-form-group">
-                    <label htmlFor="lastName">Last Name:</label>
-                    <input type="text" id="lastName" name="lastName" value={userData.lastName} onChange={handleInputChange} />
-                </div>
-                <div className="profil-form-group">
-                    <label htmlFor="dateOfBirth">Date of Birth:</label>
-                    <input type="date" id="dateOfBirth" name="dateOfBirth" value={userData.dateOfBirth} onChange={handleInputChange} />
-                </div>
-                <div className="profil-form-group">
-                    <label htmlFor="address">Address:</label>
-                    <input type="text" id="address" name="address" value={userData.address} onChange={handleInputChange} />
-                </div>
-                <div className="profil-form-group">
-                    <label htmlFor="phoneNumber">Phone Number:</label>
-                    <input type="text" id="phoneNumber" name="phoneNumber" value={userData.phoneNumber} onChange={handleInputChange} />
-                </div>
-                <div className="profil-form-group">
-                    <label htmlFor="profileImage">Profile Image:</label>
-                    <input type="file" id="profileImage" name="profileImage" onChange={(e) => setUserData({ ...userData, profileImage: e.target.files[0] })} />
-                </div>
-                <button className="profil-submit-button" type="submit">Submit</button>
-            </form>
-        </div>
+            </Content>
+            <Footer
+                style={{
+                    textAlign: 'center',
+                }}
+            >
+                Ant Design ©{new Date().getFullYear()} Created by Ant UED
+            </Footer>
+        </Layout>
     );
 };
 

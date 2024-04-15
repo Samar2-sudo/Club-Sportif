@@ -2,32 +2,34 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Form, Input, DatePicker, Upload, Button, Layout, Menu } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import moment from 'moment';
 import '../../form.css';
-
-const { Header, Content, Footer } = Layout;
 
 const ProfilPage = () => {
     const { userId } = useParams();
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [dateOfBirth, setDateOfBirth] = useState('');
+    const [address, setAddress] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState(''); // Garder comme une chaîne de caractères
     const [profileImage, setProfileImage] = useState(null);
 
-    const handleSubmit = async (values) => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         console.log('User ID:', userId);
-        console.log('Form values:', values);
+        console.log('First Name:', firstName);
+        console.log('Last Name:', lastName);
+        console.log('Date of Birth:', dateOfBirth);
+        console.log('Address:', address);
+        console.log('Phone Number:', phoneNumber); // Afficher le numéro de téléphone
         console.log('Profile Image:', profileImage);
 
         const formData = new FormData();
-        formData.append('userId', userId);
-        Object.entries(values).forEach(([key, value]) => {
-            if (key === 'dateOfBirth') {
-                formData.append(key, moment(value).format('YYYY-MM-DD'));
-            } else {
-                formData.append(key, value);
-            }
-        });
-
+        formData.append('firstName', firstName);
+        formData.append('lastName', lastName);
+        formData.append('dateOfBirth', dateOfBirth);
+        formData.append('address', address);
+        formData.append('phoneNumber', phoneNumber); // Ajouter le numéro de téléphone aux données du formulaire
+        
         if (profileImage) {
             formData.append('profileImage', profileImage);
         }
@@ -43,88 +45,36 @@ const ProfilPage = () => {
     };
 
     return (
-        <Layout>
-            <Header
-                style={{
-                    position: 'sticky',
-                    top: 0,
-                    zIndex: 1,
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                }}
-            >
-                <div className="demo-logo" />
-                <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']} style={{ flex: 1, minWidth: 0 }}>
-                    <Menu.Item key="1">Logout</Menu.Item>
-                    <Menu.Item key="2">Profile</Menu.Item>
-                </Menu>
-            </Header>
-            <Content
-                style={{
-                    padding: '0 48px',
-                }}
-            >
-                <div
-                    style={{
-                        padding: 24,
-                        minHeight: 380,
-                        background: '#fff', // Adjust background color as needed
-                        borderRadius: 10, // Adjust border radius as needed
-                    }}
-                >
-                    {/* Your form component goes here */}
-                    <div className="profil-form">
-                        <h2>Profile Form</h2>
-                        <Form
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 16 }}
-                            onFinish={handleSubmit}
-                            initialValues={{ dateOfBirth: moment() }}
-                            style={{ maxWidth: 600 }}
-                        >
-                            <Form.Item label="First Name" name="firstName">
-                                <Input />
-                            </Form.Item>
-                            <Form.Item label="Last Name" name="lastName">
-                                <Input />
-                            </Form.Item>
-                            <Form.Item label="Date of Birth" name="dateOfBirth">
-                                <DatePicker />
-                            </Form.Item>
-                            <Form.Item label="Address" name="address">
-                                <Input />
-                            </Form.Item>
-                            <Form.Item label="Phone Number" name="phoneNumber">
-                                <Input />
-                            </Form.Item>
-                            <Form.Item label="Profile Image">
-                                <Upload
-                                    action="/upload.do"
-                                    onChange={(info) => {
-                                        if (info.file.status === 'done') {
-                                            setProfileImage(info.file.originFileObj);
-                                        }
-                                    }}
-                                >
-                                    <Button icon={<UploadOutlined />}>Upload</Button>
-                                </Upload>
-                            </Form.Item>
-                            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                                <Button className="profil-submit-button" type="primary" htmlType="submit">Submit</Button>
-                            </Form.Item>
-                        </Form>
-                    </div>
+        <div className="profil-form">
+            <h2>Profile Form</h2>
+            <form onSubmit={handleSubmit}>
+                <div className="profil-form-group">
+                    <label htmlFor="firstName">First Name:</label>
+                    <input type="text" id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                 </div>
-            </Content>
-            <Footer
-                style={{
-                    textAlign: 'center',
-                }}
-            >
-                Ant Design ©{new Date().getFullYear()} Created by Ant UED
-            </Footer>
-        </Layout>
+                <div className="profil-form-group">
+                    <label htmlFor="lastName">Last Name:</label>
+                    <input type="text" id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                </div>
+                <div className="profil-form-group">
+                    <label htmlFor="dateOfBirth">Date of Birth:</label>
+                    <input type="date" id="dateOfBirth" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} />
+                </div>
+                <div className="profil-form-group">
+                    <label htmlFor="address">Address:</label>
+                    <input type="text" id="address" value={address} onChange={(e) => setAddress(e.target.value)} />
+                </div>
+                <div className="profil-form-group">
+                    <label htmlFor="phoneNumber">Phone Number:</label>
+                    <input type="text" id="phoneNumber" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} /> {/* Garder comme une saisie de texte */}
+                </div>
+                <div className="profil-form-group">
+                    <label htmlFor="profileImage">Profile Image:</label>
+                    <input type="file" id="profileImage" onChange={(e) => setProfileImage(e.target.files[0])} />
+                </div>
+                <button className="profil-submit-button" type="submit">Submit</button>
+            </form>
+        </div>
     );
 };
 
